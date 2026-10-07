@@ -34,13 +34,12 @@ void Ship::draw(sf::RenderTarget& target, sf::RenderStates states) const {
         
         // set position and rotation based on this projectile's current state. 
 
-        // TO DO: Your code here
-        // ...
+        shape.setPosition(proj.pos);
+        shape.setRotation(sf::degrees(proj.angle));
         
         // scale the projectile to make it look elliptical like a bullet.
 
-        // TO DO: Your code here
-        // ...
+        shape.setScale( sf::Vector2f{ 1.0f, PROJECTILE_SCALE} );
         
         target.draw(shape);
     }    
@@ -87,8 +86,9 @@ Ship& Ship::operator+=( float dt ) {
         
         // advance existing projectiles
         for ( auto& proj : projectiles ) {
-            // TO DO: Your code here
-            // ...
+            float rangle = proj.angle * PI/180.;
+            proj.pos += sf::Vector2f( PROJECTILE_SPEED * cos(rangle) * dt, 
+                                      PROJECTILE_SPEED * sin(rangle) * dt );
         }
 
         // clean up projectiles that are out of the screen.
@@ -101,8 +101,7 @@ Ship& Ship::operator+=( float dt ) {
         if (weapon_on) {
             if (ttnf <= 0.f) {
                 // fire a projectile based on the current position and angle of the ship
-                // TO DO: Your code here
-                // ...
+                projectiles.push_back( Projectile{ pos, angle } );
                 
                 // reset the time to next fire based on the fire rate
                 ttnf = 1.0f / FIRE_RATE;
@@ -113,5 +112,4 @@ Ship& Ship::operator+=( float dt ) {
  
         return *this;
     }
-
 
